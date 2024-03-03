@@ -1,5 +1,6 @@
-from py_fish.models.engine import Engine, EngineApplication
+from py_fish.models.engine import EngineApplication, calculate_consumption
+from py_fish.models.data import plot_power
 
-engine = Engine(EngineApplication.PROPULSION, 170.0)
 
-print(engine.calculate_consumption(60))
+print(calculate_consumption(EngineApplication.DEFAULT, 60, 120))
+plot_power()
