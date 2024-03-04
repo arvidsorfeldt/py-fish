@@ -12,6 +12,16 @@ print(
         powers=np.array([120, 130, 140]),
     )
 )
+print(
+    calculate_consumption(
+        engine_application=EngineApplication.CUSTOM,
+        engine_rating=60,
+        powers=np.array([120, 130, 140]),
+        idle_fuel_consumption=0.3,
+        bsfc=0.070,
+    )
+)
+
 load_one_day("2023-10-23")
 load_all_days()
 plot_power()
