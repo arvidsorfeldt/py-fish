@@ -1,7 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import datetime
 from py_fish.data import load_one_day
+from scipy import integrate
+
+
+def total_consumption_from_profile(consumption_profile: np.ndarray) -> float:
+    return integrate.trapezoid(consumption_profile[:, 1], consumption_profile[:, 0])
 
 
 def speed_profile_from_data(date: str) -> np.ndarray:

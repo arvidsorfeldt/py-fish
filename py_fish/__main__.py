@@ -6,11 +6,13 @@ from py_fish.operation import (
     general_speed_profile,
     plot_profiles,
     extract_transit_speed,
+    consumption_profile_form_data,
+    total_consumption_from_profile,
 )
 import numpy as np
 import matplotlib.pyplot as plt
 
-
+print(total_consumption_from_profile(consumption_profile_form_data("2023-10-23")))
 print(
     calculate_consumption(
         engine_application=EngineApplication.DEFAULT,
