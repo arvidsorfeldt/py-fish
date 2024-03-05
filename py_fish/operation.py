@@ -12,31 +12,82 @@ def speed_profile_from_data(date: str) -> np.ndarray:
     return speed_profile
 
 
-def extract_transit(
-    speed_profile: np.ndarray,
+def consumption_profile_form_data(date: str) -> np.ndarray:
+    df = load_one_day(date=date)
+    df = df.select(["time", "consumption"])
+    consumption_profile = df.to_numpy()
+    consumption_profile[:, 0] = (
+        consumption_profile[:, 0] - consumption_profile[0, 0]
+    ) / (3600 * 1e6)
+    return consumption_profile
+
+
+def general_speed_profile(
+    transit_speed: float, transit_time: float, fishing_speed: float, fishing_time: float
+) -> np.ndarray:
+    return np.array(
+        [
+            [0, 0],
+            [0, transit_speed],
+            [transit_time, transit_speed],
+            [transit_time, fishing_speed],
+            [transit_time + fishing_time, fishing_speed],
+            [transit_time + fishing_time, transit_speed],
+            [transit_time + fishing_time + transit_time, transit_speed],
+            [transit_time + fishing_time + transit_time, 0],
+        ]
+    )
+
+
+def _extract_transit(
+    profile: np.ndarray,
+    up_threshold: float,
+    down_threshold: float,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     passed_7_up = False
-    num = len(speed_profile[:, 1])
+    num = len(profile[:, 1])
     first_index = None
     last_index = None
 
     for i in range(0, num):
-        if not passed_7_up and speed_profile[i, 1] > 7:
+        if not passed_7_up and profile[i, 1] > up_threshold:
             passed_7_up = True
-        elif passed_7_up and speed_profile[i, 1] < 5:
+        elif passed_7_up and profile[i, 1] < down_threshold:
             first_index = i
             break
     passed_7_up = False
     for i in range(0, num).__reversed__():
-        if not passed_7_up and speed_profile[i, 1] > 7:
+        if not passed_7_up and profile[i, 1] > up_threshold:
             passed_7_up = True
-        elif passed_7_up and speed_profile[i, 1] < 5:
+        elif passed_7_up and profile[i, 1] < down_threshold:
             last_index = i
             break
     return (
-        speed_profile[0:first_index, :],
-        speed_profile[first_index:last_index, :],
-        speed_profile[last_index:, :],
+        profile[0 : first_index + 1, :],
+        profile[first_index : last_index + 1, :],
+        profile[last_index:, :],
+    )
+
+
+def extract_transit_speed(
+    speed_profile: np.ndarray,
+    up_threshold: float = 7.0,
+    down_threshold: float = 5.0,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    return _extract_transit(
+        profile=speed_profile, up_threshold=up_threshold, down_threshold=down_threshold
+    )
+
+
+def extract_transit_consumption(
+    consumption_profile: np.ndarray,
+    up_threshold: float = 20.0,
+    down_threshold: float = 8.0,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    return _extract_transit(
+        profile=consumption_profile,
+        up_threshold=up_threshold,
+        down_threshold=down_threshold,
     )
 
 
@@ -46,3 +97,9 @@ def plot_speed_profile(speed_profile: np.ndarray) -> None:
         speed_profile[:, 0],
         speed_profile[:, 1],
     )
+
+
+def plot_profiles(*args):
+    fig, ax = plt.subplots()
+    for arg in args:
+        ax.plot(arg[:, 0], arg[:, 1])
