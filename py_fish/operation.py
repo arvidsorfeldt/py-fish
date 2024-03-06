@@ -16,7 +16,7 @@ def speed_profile_from_data(date: str) -> np.ndarray:
     return speed_profile
 
 
-def consumption_profile_form_data(date: str) -> np.ndarray:
+def consumption_profile_from_data(date: str) -> np.ndarray:
     df = load_one_day(date=date)
     df = df.select(["time", "consumption"])
     consumption_profile = df.to_numpy()
