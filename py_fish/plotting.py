@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def plot_speed_profile(speed_profile: np.ndarray, ax) -> None:
@@ -11,8 +10,7 @@ def plot_speed_profile(speed_profile: np.ndarray, ax) -> None:
     ax.set_ylabel("Speed [kn]")
 
 
-def plot_profiles(*args) -> None:
-    fig, ax = plt.subplots()
+def plot_profiles(ax, *args) -> None:
     for arg in args:
         ax.plot(arg[:, 0], arg[:, 1])
 
