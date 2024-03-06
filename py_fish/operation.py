@@ -93,17 +93,3 @@ def extract_transit_consumption(
         up_threshold=up_threshold,
         down_threshold=down_threshold,
     )
-
-
-def plot_speed_profile(speed_profile: np.ndarray) -> None:
-    fig, ax = plt.subplots()
-    ax.plot(
-        speed_profile[:, 0],
-        speed_profile[:, 1],
-    )
-
-
-def plot_profiles(*args):
-    fig, ax = plt.subplots()
-    for arg in args:
-        ax.plot(arg[:, 0], arg[:, 1])

@@ -29,23 +29,7 @@ def load_all_days() -> pl.DataFrame:
     return df
 
 
-def plot_power():
-    speeds = np.linspace(0, 10)
-    power = calculate_propulsion_power(length=12, beam=4, speeds=speeds)
-
-    fig, ax = plt.subplots()
-    ax.plot(speeds, power)
-    ax.set_xlim([0, 10])
-    ax.set_ylim([0, 160])
-    ax.set_xlabel("Speed [kn]")
-    ax.set_ylabel("Power [kW]")
-    fig.tight_layout()
-
-    df = load_all_days()
-    fig2, ax2 = plt.subplots()
-    ax2.scatter(df.select("speed"), df.select("consumption"))
-    ax2.set_xlim([0, 10])
-    ax2.set_ylim([0, 50])
-    ax2.set_xlabel("Speed [kn]")
-    ax2.set_ylabel("Consumption [l/h]")
-    fig2.tight_layout()
+def extract_low_acceleration(speed_and_consumption: np.ndarray) -> np.ndarray:
+    acceleration = np.append(np.diff(speed_and_consumption[:, 0]), 0)
+    threshold = 0.001
+    return speed_and_consumption[np.abs(acceleration) < threshold, :]
