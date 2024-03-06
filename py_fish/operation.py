@@ -11,6 +11,7 @@ def total_consumption_from_profile(consumption_profile: np.ndarray) -> float:
 def speed_profile_from_data(date: str) -> np.ndarray:
     df = load_one_day(date=date)
     df = df.select(["time", "speed"])
+    df = df.fill_nan(0)
     speed_profile = df.to_numpy()
     speed_profile[:, 0] = (speed_profile[:, 0] - speed_profile[0, 0]) / (3600 * 1e6)
     return speed_profile
@@ -19,6 +20,7 @@ def speed_profile_from_data(date: str) -> np.ndarray:
 def consumption_profile_from_data(date: str) -> np.ndarray:
     df = load_one_day(date=date)
     df = df.select(["time", "consumption"])
+    df = df.fill_nan(0)
     consumption_profile = df.to_numpy()
     consumption_profile[:, 0] = (
         consumption_profile[:, 0] - consumption_profile[0, 0]
