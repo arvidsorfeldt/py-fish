@@ -1,17 +1,27 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from py_fish.data import load_one_day
 from scipy import integrate
+import polars as pl
 
 
 def total_consumption_from_profile(consumption_profile: np.ndarray) -> float:
     return integrate.trapezoid(consumption_profile[:, 1], consumption_profile[:, 0])
 
 
+def trim_profile(df: pl.DataFrame) -> pl.DataFrame:
+    local_df = df.with_row_index("index")
+    first_index = local_df.filter(pl.col("consumption") > 0.0).head(1).select("index")
+    last_index = local_df.filter(pl.col("consumption") > 0.0).tail(1).select("index")
+    return local_df.filter(pl.col("index").is_between(first_index, last_index)).select(
+        ["time", "speed", "consumption"]
+    )
+
+
 def speed_profile_from_data(date: str) -> np.ndarray:
     df = load_one_day(date=date)
-    df = df.select(["time", "speed"])
     df = df.fill_nan(0)
+    df = trim_profile(df)
+    df = df.select(["time", "speed"])
     speed_profile = df.to_numpy()
     speed_profile[:, 0] = (speed_profile[:, 0] - speed_profile[0, 0]) / (3600 * 1e6)
     return speed_profile
@@ -19,8 +29,9 @@ def speed_profile_from_data(date: str) -> np.ndarray:
 
 def consumption_profile_from_data(date: str) -> np.ndarray:
     df = load_one_day(date=date)
-    df = df.select(["time", "consumption"])
     df = df.fill_nan(0)
+    df = trim_profile(df)
+    df = df.select(["time", "consumption"])
     consumption_profile = df.to_numpy()
     consumption_profile[:, 0] = (
         consumption_profile[:, 0] - consumption_profile[0, 0]
