@@ -23,3 +23,11 @@ def plot_consumption_data(speed_and_consumption: np.ndarray, ax, label: str) -> 
     ax.set_ylim([0, 50])
     ax.set_xlabel("Speed [kn]")
     ax.set_ylabel("Consumption [l/h]")
+
+
+def plot_power_data(speed_and_power: np.ndarray, ax, label: str) -> None:
+    ax.scatter(speed_and_power[:, 0], speed_and_power[:, 1], s=2, label=label)
+    ax.set_xlim([0, 10])
+    ax.set_ylim([0, 120])
+    ax.set_xlabel("Speed [kn]")
+    ax.set_ylabel("Power [kW]")

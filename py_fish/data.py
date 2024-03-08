@@ -12,6 +12,7 @@ def load_one_day(date: str) -> pl.DataFrame:
     df = pl.read_csv(
         file_path, dtypes=[pl.Datetime, pl.Float64, pl.Float64, pl.Float64, pl.Float64]
     )
+    df = df.fill_nan(0)
     return df
 
 
@@ -26,6 +27,7 @@ def load_all_days() -> pl.DataFrame:
             for f in files
         ]
     )
+    df = df.fill_nan(0)
     return df
 
 

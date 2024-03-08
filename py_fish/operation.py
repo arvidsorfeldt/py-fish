@@ -89,7 +89,7 @@ def _extract_transit(
 def extract_transit_speed(
     speed_profile: np.ndarray,
     up_threshold: float = 7.0,
-    down_threshold: float = 5.0,
+    down_threshold: float = 3.0,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     return _extract_transit(
         profile=speed_profile, up_threshold=up_threshold, down_threshold=down_threshold

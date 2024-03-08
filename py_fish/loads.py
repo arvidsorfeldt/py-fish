@@ -3,9 +3,12 @@ import numpy as np
 
 
 def calculate_propulsion_power(
-    length: float, beam: float, speeds: np.ndarray
+    length: float,
+    beam: float,
+    speeds: np.ndarray,
+    c4: float = 3.6e-3,
+    c14: float = 0.57,
 ) -> np.ndarray:
-    c4, c14 = 3.6e-3, 0.57
     return (
         np.power((np.minimum(speeds, [3] * len(speeds)) / 3), 3)
         * length

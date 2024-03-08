@@ -59,4 +59,4 @@ def calculate_power_from_consumption(
         case EngineApplication.CUSTOM:
             idle_fuel_consumption = kwargs["idle_fuel_consumption"]
             bsfc = kwargs["bsfc"]
-    return (consumptions / LITER_PER_GALLON - idle_fuel_consumption) / bsfc
+    return np.max((consumptions / LITER_PER_GALLON - idle_fuel_consumption) / bsfc, 0)
