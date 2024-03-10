@@ -37,23 +37,6 @@ def consumption_profile_from_data(date: str) -> np.ndarray:
     return consumption_profile
 
 
-def general_speed_profile(
-    transit_speed: float, transit_time: float, fishing_speed: float, fishing_time: float
-) -> np.ndarray:
-    return np.array(
-        [
-            [0, 0],
-            [0, transit_speed],
-            [transit_time, transit_speed],
-            [transit_time, fishing_speed],
-            [transit_time + fishing_time, fishing_speed],
-            [transit_time + fishing_time, transit_speed],
-            [transit_time + fishing_time + transit_time, transit_speed],
-            [transit_time + fishing_time + transit_time, 0],
-        ]
-    )
-
-
 def _extract_transit(
     profile: np.ndarray,
     up_threshold: float,
