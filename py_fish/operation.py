@@ -8,6 +8,39 @@ def total_consumption_from_profile(consumption_profile: np.ndarray) -> float:
     return integrate.trapezoid(consumption_profile[:, 1], consumption_profile[:, 0])
 
 
+def distance_from_profile(speed_profile: np.ndarray) -> float:
+    return integrate.trapezoid(speed_profile[:, 1], speed_profile[:, 0])
+
+
+def custom_speed_profile(
+    distance_out: float,
+    speed_out: float,
+    distance_fishing: float,
+    speed_fishing: float,
+    distance_in: float,
+    speed_in: float,
+    time_per_pot: float,
+    number_of_pots: int = 12,
+    speed_during_pot: float = 0.7,
+) -> np.ndarray:
+    time_out = distance_out / speed_out
+    time_in = distance_in / speed_in
+    profile = np.array([[0, speed_out], [time_out, speed_out]])
+    some_time = 0.2
+    for i in range(0, number_of_pots - 1):
+        profile = np.vstack((profile, [profile[-1, 0], speed_during_pot]))
+        profile = np.vstack(
+            (profile, [profile[-1, 0] + time_per_pot, speed_during_pot])
+        )
+        profile = np.vstack((profile, [profile[-1, 0], speed_fishing]))
+        profile = np.vstack((profile, [profile[-1, 0] + some_time, speed_fishing]))
+    profile = np.vstack((profile, [profile[-1, 0], speed_during_pot]))
+    profile = np.vstack((profile, [profile[-1, 0] + time_per_pot, speed_during_pot]))
+    profile = np.vstack((profile, [profile[-1, 0], speed_in]))
+    profile = np.vstack((profile, [profile[-1, 0] + time_in, speed_in]))
+    return profile
+
+
 def trim_profile(df: pl.DataFrame) -> pl.DataFrame:
     local_df = df.with_row_index("index")
     first_index = local_df.filter(pl.col("consumption") > 0.0).head(1).select("index")
