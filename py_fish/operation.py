@@ -19,7 +19,6 @@ def trim_profile(df: pl.DataFrame) -> pl.DataFrame:
 
 def speed_profile_from_data(date: str) -> np.ndarray:
     df = load_one_day(date=date)
-    df = df.fill_nan(0)
     df = trim_profile(df)
     df = df.select(["time", "speed"])
     speed_profile = df.to_numpy()
@@ -29,7 +28,6 @@ def speed_profile_from_data(date: str) -> np.ndarray:
 
 def consumption_profile_from_data(date: str) -> np.ndarray:
     df = load_one_day(date=date)
-    df = df.fill_nan(0)
     df = trim_profile(df)
     df = df.select(["time", "consumption"])
     consumption_profile = df.to_numpy()
