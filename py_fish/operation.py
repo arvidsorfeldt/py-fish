@@ -26,7 +26,9 @@ def custom_speed_profile(
     time_out = distance_out / speed_out
     time_in = distance_in / speed_in
     profile = np.array([[0, speed_out], [time_out, speed_out]])
-    some_time = 0.2
+    some_time = (distance_fishing - speed_during_pot * time_per_pot * 12.0) / (
+        speed_fishing * 11.0
+    )
     for i in range(0, number_of_pots - 1):
         profile = np.vstack((profile, [profile[-1, 0], speed_during_pot]))
         profile = np.vstack(
