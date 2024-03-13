@@ -15,7 +15,7 @@ def calculate_propulsion_power(
         * FEET_PER_METRE
         * np.sqrt(beam * FEET_PER_METRE)
         * c4
-        * np.exp(speeds * c14)
+        * np.exp(np.maximum(speeds, [3] * len(speeds)) * c14)
     )
 
 
