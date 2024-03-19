@@ -52,8 +52,8 @@ def trim_profile(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def speed_profile_from_data(date: str) -> np.ndarray:
-    df = load_one_day(date=date)
+def speed_profile_from_data(vessel: str, date: str) -> np.ndarray:
+    df = load_one_day(vessel=vessel, date=date)
     df = trim_profile(df)
     df = df.select(["time", "speed"])
     speed_profile = df.to_numpy()
@@ -61,8 +61,8 @@ def speed_profile_from_data(date: str) -> np.ndarray:
     return speed_profile
 
 
-def consumption_profile_from_data(date: str) -> np.ndarray:
-    df = load_one_day(date=date)
+def consumption_profile_from_data(vessel: str, date: str) -> np.ndarray:
+    df = load_one_day(vessel=vessel, date=date)
     df = trim_profile(df)
     df = df.select(["time", "consumption"])
     consumption_profile = df.to_numpy()

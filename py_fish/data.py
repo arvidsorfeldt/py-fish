@@ -5,8 +5,8 @@ from py_fish.loads import calculate_propulsion_power
 from pathlib import Path
 
 
-def load_one_day(date: str) -> pl.DataFrame:
-    data_dir = Path(__file__).resolve().parent / "fredrika"
+def load_one_day(vessel: str, date: str) -> pl.DataFrame:
+    data_dir = Path(__file__).resolve().parent / vessel
     file_name = "all" + date + ".csv"
     file_path = data_dir / file_name
     df = pl.read_csv(
@@ -16,8 +16,8 @@ def load_one_day(date: str) -> pl.DataFrame:
     return df
 
 
-def load_all_days() -> pl.DataFrame:
-    data_dir = Path(__file__).resolve().parent / "fredrika"
+def load_all_days(vessel: str) -> pl.DataFrame:
+    data_dir = Path(__file__).resolve().parent / vessel
     files = [f for f in data_dir.iterdir() if f.is_file()]
     df = pl.concat(
         [
