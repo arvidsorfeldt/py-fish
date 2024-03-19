@@ -54,7 +54,8 @@ def trim_profile(df: pl.DataFrame) -> pl.DataFrame:
 
 def speed_profile_from_data(vessel: str, date: str) -> np.ndarray:
     df = load_one_day(vessel=vessel, date=date)
-    df = trim_profile(df)
+    if vessel == "fredrika":
+        df = trim_profile(df)
     df = df.select(["time", "speed"])
     speed_profile = df.to_numpy()
     speed_profile[:, 0] = (speed_profile[:, 0] - speed_profile[0, 0]) / (3600 * 1e6)

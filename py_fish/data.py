@@ -9,9 +9,16 @@ def load_one_day(vessel: str, date: str) -> pl.DataFrame:
     data_dir = Path(__file__).resolve().parent / vessel
     file_name = "all" + date + ".csv"
     file_path = data_dir / file_name
-    df = pl.read_csv(
-        file_path, dtypes=[pl.Datetime, pl.Float64, pl.Float64, pl.Float64, pl.Float64]
-    )
+    if vessel == "fredrika":
+        df = pl.read_csv(
+            file_path,
+            dtypes=[pl.Datetime, pl.Float64, pl.Float64, pl.Float64, pl.Float64],
+        )
+
+    elif vessel == "mira":
+        df = pl.read_csv(
+            file_path, dtypes=[pl.Datetime, pl.Float64, pl.Float64, pl.Float64]
+        )
     df = df.fill_nan(0)
     return df
 
