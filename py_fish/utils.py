@@ -2,6 +2,7 @@ import numpy as np
 
 FEET_PER_METRE = 3.2808399
 LITER_PER_GALLON = 3.78541178
+HP_PER_KW = 1.34102209
 
 
 def components_to_profile(
