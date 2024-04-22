@@ -1,8 +1,7 @@
 import numpy as np
 import polars as pl
-import matplotlib.pyplot as plt
-from py_fish.loads import calculate_propulsion_power
 from pathlib import Path
+from scipy.ndimage import uniform_filter1d
 
 
 def load_one_day(vessel: str, date: str) -> pl.DataFrame:
@@ -39,6 +38,8 @@ def load_all_days(vessel: str) -> pl.DataFrame:
 
 
 def extract_low_acceleration(speed_and_consumption: np.ndarray) -> np.ndarray:
-    acceleration = np.append(np.diff(speed_and_consumption[:, 0]), 0)
+    acceleration = np.append(
+        np.diff(uniform_filter1d(speed_and_consumption[:, 0], size=60)), 0
+    )
     threshold = 0.001
     return speed_and_consumption[np.abs(acceleration) < threshold, :]
