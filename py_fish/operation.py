@@ -20,16 +20,16 @@ def custom_speed_profile(
     distance_in: float,
     speed_in: float,
     time_per_pot: float,
-    number_of_pots: int = 12,
+    number_of_pots: int = 12.0,
     speed_during_pot: float = 0.7,
 ) -> np.ndarray:
     time_out = distance_out / speed_out
     time_in = distance_in / speed_in
     profile = np.array([[0, speed_out], [time_out, speed_out]])
-    some_time = (distance_fishing - speed_during_pot * time_per_pot * 12.0) / (
-        speed_fishing * 11.0
-    )
-    for _ in range(0, number_of_pots - 1):
+    some_time = (
+        distance_fishing - speed_during_pot * time_per_pot * number_of_pots
+    ) / (speed_fishing * (number_of_pots - 1))
+    for _ in range(0, int(number_of_pots) - 1):
         profile = np.vstack((profile, [profile[-1, 0], speed_during_pot]))
         profile = np.vstack(
             (profile, [profile[-1, 0] + time_per_pot, speed_during_pot])
