@@ -19,8 +19,8 @@ def custom_speed_profile(
     speed_fishing: float,
     distance_in: float,
     speed_in: float,
-    time_per_pot: float,
-    number_of_pots: int = 12.0,
+    time_per_pot: float = 0.4,
+    number_of_pots: float = 12.0,
     speed_during_pot: float = 0.7,
 ) -> np.ndarray:
     time_out = distance_out / speed_out
