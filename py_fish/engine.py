@@ -9,6 +9,7 @@ class EngineApplication(Enum):
     PROPULSION_ZERO_IDLE = auto()
     GENSET = auto()
     CUSTOM = auto()
+    IDLE_ONLY = auto()
 
 
 def calculate_consumption(
@@ -38,6 +39,10 @@ def calculate_consumption(
             c0, c1, c2, c3 = 0.26, 8.1e-4, 0.080, -2.1e-5
             idle_fuel_consumption = 0.0
             bsfc = c2 + c3 * engine_rating * HP_PER_KW
+        case EngineApplication.IDLE_ONLY:
+            c0, c1, c2, c3 = 0.26, 8.1e-4, 0.080, -2.1e-5
+            idle_fuel_consumption = c0 + c1 * engine_rating * HP_PER_KW
+            bsfc = 0.0
     return (idle_fuel_consumption + bsfc * powers) * LITER_PER_GALLON
 
 
