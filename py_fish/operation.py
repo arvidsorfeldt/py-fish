@@ -62,6 +62,16 @@ def speed_profile_from_data(vessel: str, date: str) -> np.ndarray:
     return speed_profile
 
 
+def speed_and_position_from_data(vessel: str, date: str) -> np.ndarray:
+    df = load_one_day(vessel=vessel, date=date)
+    if vessel == "fredrika":
+        df = trim_profile(df)
+    df = df.select(["time", "speed", "longitude", "latitude"])
+    profile = df.to_numpy()
+    profile[:, 0] = (profile[:, 0] - profile[0, 0]) / (3600 * 1e6)
+    return profile
+
+
 def consumption_profile_from_data(vessel: str, date: str) -> np.ndarray:
     df = load_one_day(vessel=vessel, date=date)
     df = trim_profile(df)
